@@ -1,30 +1,37 @@
 from flask import Flask, render_template,request, redirect
 from flask_sqlalchemy import SQLAlchemy
+import pytz
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
 db = SQLAlchemy(app)
+ist = pytz.timezone('Asia/Kolkata')
 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     desc = db.Column(db.String(500), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(50), nullable=False, default="Pending")
+    priority = db.Column(db.String(50), nullable=False, default="Medium")
+    date_created = db.Column(db.DateTime, default=lambda: datetime.now(ist))
 
     def __repr__(self) -> str:
         return f"{self.sno} - {self.title}"
 
-@app.route("/",methods=['GET','POST'])
+@app.route("/", methods=['GET', 'POST'])
 def hello_world():
-    if request.method=='POST':
-        title=request.form['title']
-        desc=request.form['desc']
-        project = Todo(title=title,desc=desc)
+    if request.method == 'POST':
+        title = request.form['title']
+        desc = request.form['desc']
+        status = request.form['status']
+        priority = request.form['priority']
+        project = Todo(title=title, desc=desc, status=status, priority=priority)
         db.session.add(project)
         db.session.commit()
+
     allTodo = Todo.query.all()
-    return render_template('index.html',allTodo=allTodo)
+    return render_template('index.html', allTodo=allTodo)
 
 @app.route("/about")
 def about():
@@ -36,11 +43,7 @@ def search():
     results = Todo.query.filter(Todo.title.like(f"%{query}%")).all()
     return render_template("search_results.html", results=results, query=query)
 
-@app.route("/show")
-def Home_Page():
-    allTodo = Todo.query.all()
-    print(allTodo)
-    return "<p>This is my home page!</p>"
+
 
 @app.route("/update/<int:sno>", methods=['GET', 'POST'])
 def update(sno):
@@ -48,9 +51,17 @@ def update(sno):
     if request.method == 'POST':
         todo.title = request.form['title']
         todo.desc = request.form['desc']
+        todo.status = request.form['status']
+        if todo.status == "Completed":
+            todo.priority = "Done"
+        else:
+            todo.priority = request.form['priority']
+
         db.session.commit()
         return redirect("/")
     return render_template('update.html', todo=todo)
+
+
 
 
 @app.route("/delete/<int:sno>")

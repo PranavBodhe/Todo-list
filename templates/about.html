@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}About | My Todo App{% endblock %}
 
 {% block content %}
-<h2>About This App</h2>
-<p>This is a simple Flask Todo app created by Pranav as a personal project, using Python, Flask, SQLAlchemy and Bootstrap 5.3.</p>
+<div class="container my-4">
+  <h2 class="mb-3">About This Todo App</h2>
+  <p>
+    This is a simple and clean <strong>Flask-based Todo Management Web Application</strong> built using Python, HTML, Bootstrap, and SQLite database.
+    It allows users to add, update, delete, and search their daily tasks conveniently.
+  </p>
+
+  <h4>Features:</h4>
+  <ul>
+    <li>Add new todos with Title, Description, Status, and Priority.</li>
+    <li>Automatically set Priority to <strong>Done</strong> if Status is <strong>Completed</strong>.</li>
+    <li>Update or Delete existing todos.</li>
+    <li>Real-time search functionality by title.</li>
+    <li>Responsive design with clean Bootstrap layout.</li>
+    <li>Date & Time is recorded at the time of todo creation.</li>
+  </ul>
+
+  <h4>Technologies Used:</h4>
+  <ul>
+    <li>Python 3</li>
+    <li>Flask Framework</li>
+    <li>SQLite Database</li>
+    <li>Jinja2 Templating</li>
+    <li>Bootstrap 5</li>
+    <li>Custom CSS for styling enhancements</li>
+  </ul>
+
+  <p class="mt-4"><strong>Developed by:</strong> Pranav Bodhe</p>
+  <p>© 2025 | All Rights Reserved.</p>
+</div>
 {% endblock %}

@@ -3,17 +3,78 @@
 {% block title %}Update Todo{% endblock %}
 
 {% block content %}
-<h2>Update Todo</h2>
-<form method="POST">
-  <div class="mb-3">
-    <label for="title" class="form-label">Todo Title</label>
-    <input type="text" class="form-control" name="title" id="title" value="{{ todo.title }}" required>
-  </div>
-  <div class="mb-3">
-    <label for="desc" class="form-label">Todo Description</label>
-    <input type="text" class="form-control" name="desc" id="desc" value="{{ todo.desc }}" required>
-  </div>
-  <button type="submit" class="btn btn-success">Update</button>
-  <a href="/" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container my-4">
+  <h2>Update Todo</h2>
+  <form action="/update/{{ todo.sno }}" method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Todo Title</label>
+      <input type="text" class="form-control" name="title" id="title" value="{{ todo.title }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="desc" class="form-label">Todo Description</label>
+      <input type="text" class="form-control" name="desc" id="desc" value="{{ todo.desc }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" name="status" class="form-control" required onchange="updatePriorityOptions()">
+        <option value="Pending" {% if todo.status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="Completed" {% if todo.status == 'Completed' %}selected{% endif %}>Completed</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="priority" class="form-label">Priority</label>
+      <select id="priority" name="priority" class="form-control" required>
+        
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update Todo</button>
+  </form>
+</div>
+
+<script>
+  function updatePriorityOptions() {
+    const status = document.getElementById("status").value;
+    const priority = document.getElementById("priority");
+
+    priority.innerHTML = "";  
+
+    if (status === "Completed") {
+      const doneOption = document.createElement("option");
+      doneOption.value = "Done";
+      doneOption.text = "Done";
+      priority.add(doneOption);
+      priority.value = "Done";
+      priority.disabled = true;
+    } else if (status === "Pending") {
+      const highOption = document.createElement("option");
+      highOption.value = "High";
+      highOption.text = "High";
+      priority.add(highOption);
+
+      const lowOption = document.createElement("option");
+      lowOption.value = "Low";
+      lowOption.text = "Low";
+      priority.add(lowOption);
+
+      priority.disabled = false;
+    }
+  }
+
+
+  window.onload = function() {
+    updatePriorityOptions();
+    const currentPriority = "{{ todo.priority }}";
+    const priorityField = document.getElementById("priority");
+
+    
+    if (priorityField.disabled === false) {
+      priorityField.value = currentPriority;
+    }
+  };
+</script>
+
 {% endblock %}
