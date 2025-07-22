@@ -34,12 +34,24 @@ Easily manage your daily tasks and stay productive!
 ## 📂 Project Structure
 
 📦 todo-flask-app/
+├── data/
+├── instance/
+│   └── project.db                # SQLite database file
 ├── static/
-│ ├── styles.css
-│ └── chat.js (if used)
+│   └── style.css                 # Stylesheet
 ├── templates/
-│ └── index.html
-├── main.py
-├── todo.db
-├── requirements.txt
-└── README.md
+│   ├── about.html
+│   ├── base.html
+│   ├── index.html
+│   ├── search_result.html
+│   └── update.html
+├── .dockerignore
+├── .gitignore
+├── app.py                        # Main Flask application
+├── compose.yaml                  # Docker Compose config
+├── Dockerfile                    # Dockerfile for containerizing the app
+├── README.md                     # Project README
+├── README.Docker.md              # Docker-specific documentation
+├── requirements.txt              # Python dependencies
+├── Screenshot YYYY-MM-DD.png     # Screenshot images for README or docs
+
